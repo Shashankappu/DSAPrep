@@ -1215,6 +1215,155 @@ body {
     display: block;
 }
 
+/* Code Actions */
+.code-actions {
+    display: flex;
+    gap: 0.25rem;
+}
+
+.code-action-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    background: none;
+    border: none;
+    color: #abb2bf;
+    font-size: 0.75rem;
+    cursor: pointer;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    transition: all var(--transition-fast);
+    font-family: inherit;
+}
+
+.code-action-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+.code-action-btn.edit-btn.active {
+    background: rgba(129, 140, 248, 0.2);
+    color: #818cf8;
+}
+
+.code-action-btn.copy-btn.copied {
+    color: var(--easy);
+}
+
+/* Code Editor */
+.code-edit-mode {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.code-edit-mode.hidden {
+    display: none;
+}
+
+.code-editor {
+    width: 100%;
+    min-height: 300px;
+    background: #282c34;
+    color: #abb2bf;
+    border: none;
+    border-radius: 0;
+    padding: 1rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    line-height: 1.6;
+    resize: none;
+    outline: none;
+    tab-size: 4;
+    -moz-tab-size: 4;
+    overflow-x: auto;
+    white-space: pre;
+    box-sizing: border-box;
+}
+
+.code-editor:focus {
+    box-shadow: inset 0 0 0 2px rgba(129, 140, 248, 0.4);
+}
+
+.code-edit-actions {
+    display: flex;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    background: #21252b;
+    border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.code-save-btn,
+.code-cancel-btn,
+.code-reset-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.4rem 0.85rem;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    font-family: inherit;
+}
+
+.code-save-btn {
+    background: rgba(34, 197, 94, 0.15);
+    color: #4ade80;
+    border-color: rgba(34, 197, 94, 0.3);
+}
+
+.code-save-btn:hover {
+    background: rgba(34, 197, 94, 0.25);
+    border-color: rgba(34, 197, 94, 0.5);
+}
+
+.code-cancel-btn {
+    background: rgba(255, 255, 255, 0.05);
+    color: #abb2bf;
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.code-cancel-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+.code-reset-btn {
+    background: rgba(245, 158, 11, 0.1);
+    color: #fbbf24;
+    border-color: rgba(245, 158, 11, 0.25);
+    margin-left: auto;
+}
+
+.code-reset-btn:hover {
+    background: rgba(245, 158, 11, 0.2);
+    border-color: rgba(245, 158, 11, 0.4);
+}
+
+/* Modified Badge */
+.code-modified-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    margin-top: 0.5rem;
+    padding: 0.2rem 0.6rem;
+    background: rgba(129, 140, 248, 0.1);
+    border: 1px solid rgba(129, 140, 248, 0.25);
+    border-radius: 12px;
+    font-size: 0.7rem;
+    color: #818cf8;
+    font-weight: 500;
+    animation: fadeIn 0.2s ease;
+}
+
+.code-modified-badge.hidden {
+    display: none;
+}
+
 /* Complexity Cards */
 .complexity-cards {
     display: grid;

@@ -285,16 +285,61 @@
                         <h3>💻 C++ Solution</h3>
                         <div class="code-header">
                             <div class="code-lang">C++</div>
-                            <button id="copy-code" class="copy-btn" title="Copy code">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2">
-                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-                                </svg>
-                                <span>Copy</span>
-                            </button>
+                            <div class="code-actions">
+                                <button id="edit-code" class="code-action-btn edit-btn" title="Edit code">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                    </svg>
+                                    <span>Edit</span>
+                                </button>
+                                <button id="copy-code" class="code-action-btn copy-btn" title="Copy code">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                    </svg>
+                                    <span>Copy</span>
+                                </button>
+                            </div>
                         </div>
-                        <pre><code id="modal-code" class="language-cpp"></code></pre>
+                        <!-- View Mode -->
+                        <div id="code-view-mode">
+                            <pre><code id="modal-code" class="language-cpp"></code></pre>
+                        </div>
+                        <!-- Edit Mode -->
+                        <div id="code-edit-mode" class="code-edit-mode hidden">
+                            <textarea id="code-editor" class="code-editor" spellcheck="false"></textarea>
+                            <div class="code-edit-actions">
+                                <button id="save-code" class="code-save-btn" title="Save changes">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                    Save
+                                </button>
+                                <button id="cancel-code-edit" class="code-cancel-btn" title="Cancel editing">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                                    </svg>
+                                    Cancel
+                                </button>
+                                <button id="reset-code" class="code-reset-btn" title="Reset to original">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <polyline points="1 4 1 10 7 10"></polyline>
+                                        <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+                                    </svg>
+                                    Reset Original
+                                </button>
+                            </div>
+                        </div>
+                        <div id="code-modified-badge" class="code-modified-badge hidden">
+                            ✏️ Modified
+                        </div>
                     </section>
 
                     <!-- Complexity -->

@@ -24,6 +24,7 @@
         view: 'grid', // grid | list
         solvedProblems: new Set(),
         bookmarkedProblems: new Set(),
+        customCode: {}, // { problemId: customCodeString }
         theme: 'dark'
     };
 
@@ -64,6 +65,7 @@
                 const parsed = JSON.parse(saved);
                 state.solvedProblems = new Set(parsed.solved || []);
                 state.bookmarkedProblems = new Set(parsed.bookmarked || []);
+                state.customCode = parsed.customCode || {};
                 state.theme = parsed.theme || 'dark';
                 state.view = parsed.view || 'grid';
             }
@@ -77,12 +79,24 @@
             localStorage.setItem('dsa-master-state', JSON.stringify({
                 solved: Array.from(state.solvedProblems),
                 bookmarked: Array.from(state.bookmarkedProblems),
+                customCode: state.customCode,
                 theme: state.theme,
                 view: state.view
             }));
         } catch (e) {
             console.warn('Failed to save state:', e);
         }
+    }
+
+    function getCodeForProblem(problem) {
+        if (state.customCode[problem.id] !== undefined) {
+            return state.customCode[problem.id];
+        }
+        return problem.code || '// No solution available';
+    }
+
+    function hasCustomCode(problemId) {
+        return state.customCode[problemId] !== undefined;
     }
 
     // ============================================
@@ -370,8 +384,24 @@
 
         // Code
         const codeEl = document.getElementById('modal-code');
-        codeEl.textContent = problem.code || '// No solution available';
+        const displayCode = getCodeForProblem(problem);
+        codeEl.textContent = displayCode;
         hljs.highlightElement(codeEl);
+
+        // Reset edit mode
+        document.getElementById('code-view-mode').classList.remove('hidden');
+        document.getElementById('code-edit-mode').classList.add('hidden');
+        const editBtn = document.getElementById('edit-code');
+        editBtn.querySelector('span').textContent = 'Edit';
+        editBtn.classList.remove('active');
+
+        // Show modified badge if custom code exists
+        const modifiedBadge = document.getElementById('code-modified-badge');
+        if (hasCustomCode(problem.id)) {
+            modifiedBadge.classList.remove('hidden');
+        } else {
+            modifiedBadge.classList.add('hidden');
+        }
 
         // Complexity
         document.getElementById('modal-time').textContent = problem.timeComplexity || 'N/A';
@@ -655,7 +685,10 @@
 
         // Copy code
         document.getElementById('copy-code').addEventListener('click', () => {
-            const code = document.getElementById('modal-code').textContent;
+            const editMode = document.getElementById('code-edit-mode');
+            const code = editMode.classList.contains('hidden')
+                ? document.getElementById('modal-code').textContent
+                : document.getElementById('code-editor').value;
             navigator.clipboard.writeText(code).then(() => {
                 const btn = document.getElementById('copy-code');
                 btn.classList.add('copied');
@@ -665,6 +698,123 @@
                     btn.querySelector('span').textContent = 'Copy';
                 }, 2000);
             });
+        });
+
+        // Edit code
+        document.getElementById('edit-code').addEventListener('click', () => {
+            const viewMode = document.getElementById('code-view-mode');
+            const editMode = document.getElementById('code-edit-mode');
+            const editor = document.getElementById('code-editor');
+            const editBtn = document.getElementById('edit-code');
+
+            if (editMode.classList.contains('hidden')) {
+                // Enter edit mode
+                const problem = state.filteredProblems[state.currentProblemIndex];
+                editor.value = getCodeForProblem(problem);
+                viewMode.classList.add('hidden');
+                editMode.classList.remove('hidden');
+                editBtn.querySelector('span').textContent = 'Editing';
+                editBtn.classList.add('active');
+                editor.focus();
+                // Auto-resize textarea
+                editor.style.height = 'auto';
+                editor.style.height = Math.max(300, editor.scrollHeight) + 'px';
+            }
+        });
+
+        // Save code edit
+        document.getElementById('save-code').addEventListener('click', () => {
+            const problem = state.filteredProblems[state.currentProblemIndex];
+            if (!problem) return;
+
+            const editor = document.getElementById('code-editor');
+            const newCode = editor.value;
+
+            // Save custom code
+            state.customCode[problem.id] = newCode;
+            saveState();
+
+            // Update the view
+            const codeEl = document.getElementById('modal-code');
+            codeEl.textContent = newCode;
+            hljs.highlightElement(codeEl);
+
+            // Switch back to view mode
+            document.getElementById('code-view-mode').classList.remove('hidden');
+            document.getElementById('code-edit-mode').classList.add('hidden');
+            const editBtn = document.getElementById('edit-code');
+            editBtn.querySelector('span').textContent = 'Edit';
+            editBtn.classList.remove('active');
+
+            // Show modified badge
+            document.getElementById('code-modified-badge').classList.remove('hidden');
+
+            showToast('Code saved successfully ✅');
+        });
+
+        // Cancel code edit
+        document.getElementById('cancel-code-edit').addEventListener('click', () => {
+            document.getElementById('code-view-mode').classList.remove('hidden');
+            document.getElementById('code-edit-mode').classList.add('hidden');
+            const editBtn = document.getElementById('edit-code');
+            editBtn.querySelector('span').textContent = 'Edit';
+            editBtn.classList.remove('active');
+        });
+
+        // Reset code to original
+        document.getElementById('reset-code').addEventListener('click', () => {
+            const problem = state.filteredProblems[state.currentProblemIndex];
+            if (!problem) return;
+
+            if (!hasCustomCode(problem.id)) {
+                showToast('Code is already original');
+                return;
+            }
+
+            if (confirm('Reset to the original code? Your edits will be lost.')) {
+                delete state.customCode[problem.id];
+                saveState();
+
+                const originalCode = problem.code || '// No solution available';
+
+                // Update editor if in edit mode
+                document.getElementById('code-editor').value = originalCode;
+
+                // Update the view
+                const codeEl = document.getElementById('modal-code');
+                codeEl.textContent = originalCode;
+                hljs.highlightElement(codeEl);
+
+                // Switch to view mode
+                document.getElementById('code-view-mode').classList.remove('hidden');
+                document.getElementById('code-edit-mode').classList.add('hidden');
+                const editBtn = document.getElementById('edit-code');
+                editBtn.querySelector('span').textContent = 'Edit';
+                editBtn.classList.remove('active');
+
+                // Hide modified badge
+                document.getElementById('code-modified-badge').classList.add('hidden');
+
+                showToast('Code reset to original 🔄');
+            }
+        });
+
+        // Tab key support in code editor
+        document.getElementById('code-editor').addEventListener('keydown', (e) => {
+            if (e.key === 'Tab') {
+                e.preventDefault();
+                const editor = e.target;
+                const start = editor.selectionStart;
+                const end = editor.selectionEnd;
+                editor.value = editor.value.substring(0, start) + '    ' + editor.value.substring(end);
+                editor.selectionStart = editor.selectionEnd = start + 4;
+            }
+        });
+
+        // Auto resize textarea on input
+        document.getElementById('code-editor').addEventListener('input', (e) => {
+            e.target.style.height = 'auto';
+            e.target.style.height = Math.max(300, e.target.scrollHeight) + 'px';
         });
 
         // Reset progress
@@ -683,19 +833,32 @@
 
     function setupKeyboardShortcuts() {
         document.addEventListener('keydown', (e) => {
+            // Don't handle shortcuts when code editor is focused
+            const isEditing = document.activeElement === document.getElementById('code-editor');
+
             // Ctrl+K - Focus search
             if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
                 e.preventDefault();
                 document.getElementById('search-input').focus();
             }
 
-            // Escape - Close modal
+            // Escape - Exit edit mode first, then close modal
             if (e.key === 'Escape') {
+                const editMode = document.getElementById('code-edit-mode');
+                if (editMode && !editMode.classList.contains('hidden')) {
+                    // Exit edit mode
+                    document.getElementById('code-view-mode').classList.remove('hidden');
+                    editMode.classList.add('hidden');
+                    const editBtn = document.getElementById('edit-code');
+                    editBtn.querySelector('span').textContent = 'Edit';
+                    editBtn.classList.remove('active');
+                    return;
+                }
                 closeModal();
             }
 
-            // Arrow keys in modal
-            if (!document.getElementById('problem-modal').classList.contains('hidden')) {
+            // Arrow keys in modal (not while editing)
+            if (!isEditing && !document.getElementById('problem-modal').classList.contains('hidden')) {
                 if (e.key === 'ArrowLeft') {
                     e.preventDefault();
                     if (state.currentProblemIndex > 0) {
