@@ -3,9 +3,6 @@
 ## Overview
 A comprehensive, premium DSA preparation web app with **155 curated problems** from Neetcode 150, Blind 75, Striver SDE Sheet, and Google Interview Favorites — all with C++ solutions.
 
-> [!IMPORTANT]
-> Your interview is in **10 days** (March 15, 2026). The app includes a countdown timer!
-
 ## Screenshots
 
 ````carousel
