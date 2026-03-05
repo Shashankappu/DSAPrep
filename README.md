@@ -90,6 +90,6 @@ Then open `http://localhost:8080` in your browser.
 | [merge.js](file:///C:/Users/shash/.gemini/antigravity/scratch/DSAPrep/merge.js) | Combines all data files |
 
 > [!TIP]
-> **Study Strategy for 10 days**: Do 15 problems/day. Start with Easy, then Medium, then Hard. Focus on Google Favorites first!
+> **Study Strategy **: Do atleast 2 problems/day. Start with Easy, then Medium, then Hard. Focus on Google Favorites first!
 
 Good luck with your interview! 🎯
