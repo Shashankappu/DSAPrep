@@ -9,9 +9,11 @@ A comprehensive, premium DSA preparation web app with **155 curated problems** f
 ## Screenshots
 
 ````carousel
-![Dashboard with all 155 problems and category breakdown](C:\Users\shash\.gemini\antigravity\brain\62e55160-3c7a-41ba-b85f-75299b41ea07\dsa_master_dashboard_1772683703632.png)
+![Dashboard with all 155 problems and category breakdown](<img width="929" height="917" alt="dsa_master_dashboard_1772683703632" src="https://github.com/user-attachments/assets/ed1dbe35-0fb1-44bd-b189-f1dd5b299dc3" />
+)
 <!-- slide -->
-![Problem detail modal with description, I/O, constraints, explanation, approach, and C++ code](C:\Users\shash\.gemini\antigravity\brain\62e55160-3c7a-41ba-b85f-75299b41ea07\problem_modal_details_1772683733414.png)
+![Problem detail modal with description, I/O, constraints, explanation, approach, and C++ code](<img width="929" height="917" alt="problem_modal_details_1772683733414" src="https://github.com/user-attachments/assets/9dd6c44d-ab8c-4d70-a4d5-323b29b5965e" />
+)
 ````
 
 ## 📊 Problem Breakdown (155 Total)
@@ -62,7 +64,7 @@ The app is currently running at: **http://localhost:8080**
 
 To restart later:
 ```bash
-cd C:\Users\shash\.gemini\antigravity\scratch\DSAPrep
+cd path/to/DSAPrep
 python -m http.server 8080
 ```
 
