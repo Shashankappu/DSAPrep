@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>DSA Master - Google L3 Interview Prep</title>
+    <meta name="description"
+        content="Comprehensive DSA preparation app with 150+ curated problems from Neetcode 150, Blind 75, and Striver SDE Sheet for Google L3 interview preparation.">
+    <meta name="theme-color" content="#0f0f23">
+    <link rel="manifest" href="manifest.json">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <!-- Splash Screen -->
+    <div id="splash-screen" class="splash-screen">
+        <div class="splash-content">
+            <div class="splash-icon">🚀</div>
+            <h1 class="splash-title">DSA Master</h1>
+            <p class="splash-subtitle">Google L3 Interview Prep</p>
+            <div class="splash-loader">
+                <div class="splash-loader-bar"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div id="app" class="app hidden">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <button id="menu-toggle" class="icon-btn" aria-label="Toggle menu">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
+                <div class="logo">
+                    <span class="logo-icon">⚡</span>
+                    <span class="logo-text">DSA Master</span>
+                </div>
+            </div>
+            <div class="header-center">
+                <div class="search-bar" id="search-bar">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    <input type="text" id="search-input" placeholder="Search problems... (Ctrl+K)" autocomplete="off">
+                    <kbd class="search-shortcut">Ctrl+K</kbd>
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="progress-ring-container" title="Overall Progress">
+                    <svg class="progress-ring" width="40" height="40">
+                        <circle class="progress-ring-bg" cx="20" cy="20" r="16"></circle>
+                        <circle class="progress-ring-fill" id="progress-ring-fill" cx="20" cy="20" r="16"></circle>
+                    </svg>
+                    <span class="progress-ring-text" id="progress-ring-text">0%</span>
+                </div>
+                <button id="bookmark-filter" class="icon-btn" title="Show bookmarked">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                </button>
+                <button id="theme-toggle" class="icon-btn" title="Toggle theme">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- Sidebar -->
+        <aside id="sidebar" class="sidebar">
+            <div class="sidebar-header">
+                <h2>📊 Dashboard</h2>
+                <button id="sidebar-close" class="icon-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="sidebar-stats">
+                <div class="stat-card">
+                    <div class="stat-value" id="stat-total">0</div>
+                    <div class="stat-label">Total Problems</div>
+                </div>
+                <div class="stat-card stat-solved">
+                    <div class="stat-value" id="stat-solved">0</div>
+                    <div class="stat-label">Solved</div>
+                </div>
+                <div class="stat-card stat-bookmarked">
+                    <div class="stat-value" id="stat-bookmarked">0</div>
+                    <div class="stat-label">Bookmarked</div>
+                </div>
+            </div>
+            <div class="sidebar-section">
+                <h3>📁 Categories</h3>
+                <div id="category-list" class="category-list"></div>
+            </div>
+            <div class="sidebar-section">
+                <h3>🎯 Difficulty</h3>
+                <div class="difficulty-filters">
+                    <button class="diff-btn diff-easy active" data-difficulty="all">All</button>
+                    <button class="diff-btn diff-easy" data-difficulty="Easy">Easy</button>
+                    <button class="diff-btn diff-medium" data-difficulty="Medium">Medium</button>
+                    <button class="diff-btn diff-hard" data-difficulty="Hard">Hard</button>
+                </div>
+            </div>
+            <div class="sidebar-section">
+                <h3>📋 Source</h3>
+                <div class="source-filters" id="source-filters">
+                    <button class="source-btn active" data-source="all">All</button>
+                    <button class="source-btn" data-source="Blind 75">Blind 75</button>
+                    <button class="source-btn" data-source="Neetcode 150">Neetcode 150</button>
+                    <button class="source-btn" data-source="Striver SDE">Striver SDE</button>
+                    <button class="source-btn" data-source="Google Fav">Google Fav</button>
+                </div>
+            </div>
+            <div class="sidebar-section">
+                <h3>📈 Progress by Difficulty</h3>
+                <div class="progress-bars">
+                    <div class="progress-bar-item">
+                        <div class="progress-bar-label">
+                            <span>Easy</span>
+                            <span id="easy-progress-text">0/0</span>
+                        </div>
+                        <div class="progress-bar-track easy-track">
+                            <div class="progress-bar-fill" id="easy-progress-fill"></div>
+                        </div>
+                    </div>
+                    <div class="progress-bar-item">
+                        <div class="progress-bar-label">
+                            <span>Medium</span>
+                            <span id="medium-progress-text">0/0</span>
+                        </div>
+                        <div class="progress-bar-track medium-track">
+                            <div class="progress-bar-fill" id="medium-progress-fill"></div>
+                        </div>
+                    </div>
+                    <div class="progress-bar-item">
+                        <div class="progress-bar-label">
+                            <span>Hard</span>
+                            <span id="hard-progress-text">0/0</span>
+                        </div>
+                        <div class="progress-bar-track hard-track">
+                            <div class="progress-bar-fill" id="hard-progress-fill"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="sidebar-footer">
+                <p>🎯 Google L3 Interview</p>
+                <p id="countdown-text" class="countdown-text"></p>
+                <button id="reset-progress" class="reset-btn">🔄 Reset Progress</button>
+            </div>
+        </aside>
+        <div id="sidebar-overlay" class="sidebar-overlay"></div>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Filter Tags -->
+            <div class="active-filters" id="active-filters"></div>
+
+            <!-- Problem Count -->
+            <div class="results-info">
+                <span id="results-count">0 problems</span>
+                <div class="view-toggle">
+                    <button id="view-grid" class="view-btn active" title="Grid view">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <rect x="3" y="3" width="7" height="7"></rect>
+                            <rect x="14" y="3" width="7" height="7"></rect>
+                            <rect x="3" y="14" width="7" height="7"></rect>
+                            <rect x="14" y="14" width="7" height="7"></rect>
+                        </svg>
+                    </button>
+                    <button id="view-list" class="view-btn" title="List view">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <line x1="8" y1="6" x2="21" y2="6"></line>
+                            <line x1="8" y1="12" x2="21" y2="12"></line>
+                            <line x1="8" y1="18" x2="21" y2="18"></line>
+                            <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                            <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                            <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Problem Cards Grid -->
+            <div id="problems-grid" class="problems-grid"></div>
+
+            <!-- Load more / empty state -->
+            <div id="empty-state" class="empty-state hidden">
+                <div class="empty-icon">🔍</div>
+                <h3>No problems found</h3>
+                <p>Try adjusting your filters or search query</p>
+            </div>
+        </main>
+
+        <!-- Problem Detail Modal -->
+        <div id="problem-modal" class="modal hidden">
+            <div class="modal-backdrop" id="modal-backdrop"></div>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title-section">
+                        <span class="modal-difficulty" id="modal-difficulty"></span>
+                        <h2 id="modal-title"></h2>
+                        <div class="modal-tags" id="modal-tags"></div>
+                    </div>
+                    <div class="modal-actions">
+                        <button id="modal-bookmark" class="icon-btn" title="Bookmark">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+                            </svg>
+                        </button>
+                        <button id="modal-solved" class="icon-btn" title="Mark as solved">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                        </button>
+                        <button id="modal-close" class="icon-btn" title="Close">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <line x1="18" y1="6" x2="6" y2="18"></line>
+                                <line x1="6" y1="6" x2="18" y2="18"></line>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="modal-body" id="modal-body">
+                    <!-- Problem Description -->
+                    <section class="modal-section">
+                        <h3>📝 Problem Description</h3>
+                        <div id="modal-description" class="description-text"></div>
+                    </section>
+
+                    <!-- Input/Output -->
+                    <section class="modal-section">
+                        <h3>📥 Input / Output</h3>
+                        <div id="modal-io" class="io-section"></div>
+                    </section>
+
+                    <!-- Constraints -->
+                    <section class="modal-section">
+                        <h3>⚠️ Constraints</h3>
+                        <div id="modal-constraints" class="constraints-section"></div>
+                    </section>
+
+                    <!-- Explanation -->
+                    <section class="modal-section">
+                        <h3>💡 Explanation</h3>
+                        <div id="modal-explanation" class="explanation-text"></div>
+                    </section>
+
+                    <!-- Approach -->
+                    <section class="modal-section">
+                        <h3>🧠 Approach</h3>
+                        <div id="modal-approach" class="approach-text"></div>
+                    </section>
+
+                    <!-- Code -->
+                    <section class="modal-section">
+                        <h3>💻 C++ Solution</h3>
+                        <div class="code-header">
+                            <div class="code-lang">C++</div>
+                            <button id="copy-code" class="copy-btn" title="Copy code">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                </svg>
+                                <span>Copy</span>
+                            </button>
+                        </div>
+                        <pre><code id="modal-code" class="language-cpp"></code></pre>
+                    </section>
+
+                    <!-- Complexity -->
+                    <section class="modal-section">
+                        <h3>📊 Complexity Analysis</h3>
+                        <div class="complexity-cards">
+                            <div class="complexity-card time-card">
+                                <div class="complexity-icon">⏱️</div>
+                                <div class="complexity-label">Time</div>
+                                <div class="complexity-value" id="modal-time"></div>
+                            </div>
+                            <div class="complexity-card space-card">
+                                <div class="complexity-icon">💾</div>
+                                <div class="complexity-label">Space</div>
+                                <div class="complexity-value" id="modal-space"></div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Video Link -->
+                    <section class="modal-section" id="video-section">
+                        <h3>🎥 Video Explanation</h3>
+                        <a id="modal-video" class="video-link" href="#" target="_blank" rel="noopener">
+                            <div class="video-link-content">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                    <path
+                                        d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814z" />
+                                    <polygon fill="#fff" points="9.545 15.568 15.818 12 9.545 8.432" />
+                                </svg>
+                                <span>Watch Solution Video on YouTube</span>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                                    <polyline points="15 3 21 3 21 9"></polyline>
+                                    <line x1="10" y1="14" x2="21" y2="3"></line>
+                                </svg>
+                            </div>
+                        </a>
+                    </section>
+
+                    <!-- Navigation -->
+                    <div class="modal-nav">
+                        <button id="modal-prev" class="nav-btn">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <polyline points="15 18 9 12 15 6"></polyline>
+                            </svg>
+                            Previous
+                        </button>
+                        <button id="modal-next" class="nav-btn">
+                            Next
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <polyline points="9 18 15 12 9 6"></polyline>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Toast Notification -->
+        <div id="toast" class="toast hidden">
+            <span id="toast-message"></span>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/cpp.min.js"></script>
+    <script src="data.js"></script>
+    <script src="data2.js"></script>
+    <script src="data3.js"></script>
+    <script src="data4.js"></script>
+    <script src="data5.js"></script>
+    <script src="data6.js"></script>
+    <script src="data7.js"></script>
+    <script src="merge.js"></script>
+    <script src="app.js"></script>
+</body>
+
+</html>
